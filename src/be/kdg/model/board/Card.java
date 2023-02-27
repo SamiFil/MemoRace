@@ -3,28 +3,34 @@ package be.kdg.model.board;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-/**
- * Sami Filjak
- * 23/12/2022
- */
 public class Card extends ImageView {
     private final Image voorkant;
     private final Image achterkant;
     private boolean isOmgedraaid;
+    private final int rij;
+    private final int kolom;
+    private final Speelveld speelveld;
 
-    public Card(Image achterkant, Image voorkant) {
+    public Card(int rij, int kolom, Image achterkant, Image voorkant, Speelveld speelveld) {
         super(achterkant);
+        this.rij = rij;
+        this.kolom = kolom;
         this.voorkant = voorkant;
         this.achterkant = achterkant;
+        this.speelveld = speelveld;
         setOnMouseClicked(event -> draaiOm());
     }
 
     public void draaiOm() {
-        if (isOmgedraaid) {
-            setImage(achterkant);
-        } else {
+        if (!isOmgedraaid && speelveld.isZetToegestaan(rij, kolom)) {
             setImage(voorkant);
+            isOmgedraaid = true;
+            speelveld.registreerKeuze(this);
         }
-        isOmgedraaid = !isOmgedraaid;
+    }
+
+    public void terugdraaien() {
+        setImage(achterkant);
+        isOmgedraaid = false;
     }
 }

@@ -1,44 +1,62 @@
 package be.kdg.model.board;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/**
- * Sami Filjak
- * 23/12/2022
- */
 public class Speelveld {
-    private ArrayList<Card> board;
-    private Pion pion;
-    private Dobbelsteen dobbelsteen;
-    private int numberMatchedCards;
-    private int numFailedAttempts;
+    private final int dimensie;
+    private final Card[][] kaarten;
+    private Card geselecteerdeKaart;
 
-    public Speelveld(ArrayList<Card> board, Pion pion, Dobbelsteen dobbelsteen, int numberMatchedCards, int numFailedAttempts) {
-        this.board = board;
-        this.pion = pion;
-        this.dobbelsteen = dobbelsteen;
-        this.numberMatchedCards = numberMatchedCards;
-        this.numFailedAttempts = numFailedAttempts;
+    public Speelveld(int dimensie) {
+        this.dimensie = dimensie;
+        this.kaarten = new Card[dimensie][dimensie];
+        vulSpeelveld();
     }
-    private boolean isSolved(boolean isSolved) {
-    return isSolved;
-    }
-    private void resetBoard() {
 
+    private void vulSpeelveld() {
+        List<Integer> waardes = new ArrayList<>();
+        for (int i = 0; i < dimensie * dimensie / 2; i++) {
+            waardes.add(i);
+            waardes.add(i);
+        }
+        Collections.shuffle(waardes);
+        for (int i = 0; i < dimensie; i++) {
+            for (int j = 0; j < dimensie; j++) {
+                int waarde = waardes.remove(0);
+                kaarten[i][j] = new Card(waarde);
+            }
+        }
     }
-    private void resetMatched() {
 
+    public Card getKaart(int rij, int kolom) {
+        return kaarten[rij][kolom];
     }
-    private void resetFailedAttempts() {
 
+    public void draaiKaartOm(Card kaart) {
+        if (geselecteerdeKaart == null) {
+            geselecteerdeKaart = kaart;
+        } else {
+            if (geselecteerdeKaart.getWaarde() == kaart.getWaarde()) {
+                geselecteerdeKaart.setGelijk(true);
+                kaart.setGelijk(true);
+            }
+            geselecteerdeKaart.setOmgedraaid(false);
+            kaart.setOmgedraaid(false);
+            geselecteerdeKaart = null;
+        }
+        kaart.setOmgedraaid(true);
     }
-    private void resetNumberMatchedCards() {
 
-    }
-    private void showBoard() {
-
-    }
-    private void timer() {
-
+    public boolean isGewonnen() {
+        for (int i = 0; i < dimensie; i++) {
+            for (int j = 0; j < dimensie; j++) {
+                if (!kaarten[i][j].isGelijk()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

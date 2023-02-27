@@ -26,7 +26,7 @@ public class GameView extends Group {
         cards = new Card[4][4];
         hBox = new HBox();
         vBox = new VBox();
-        achterkant = new Image("C:\\Users\\sami_\\Downloads\\MemoRace\\Resources\\cards\\back.png");
+        achterkant = new Image("/cards/back.png");
         voorkant = new Image[8];
         test = new Label("Test");
     }
@@ -34,17 +34,17 @@ public class GameView extends Group {
 
     private void layoutNodes() {
         for (int i = 0; i < voorkant.length; i++) {
-            voorkant[i] = new Image("C:\\Users\\sami_\\Downloads\\MemoRace\\Resources\\cards\\" + i + ".png");
+            voorkant[i] = new Image("/cards/" + i + ".png");
         }
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 Card card = new Card(achterkant, voorkant[4]);
-                card.setLayoutX(j * card.getFitWidth());
-                card.setLayoutY(i * card.getFitHeight());
+                card.setTranslateX(i * card.getWidth());
+                card.setTranslateY(j * card.getHeight());
                 getChildren().add(card);
                 cards[i][j] = card;
             }
         }
     }
-}
+    }
 
